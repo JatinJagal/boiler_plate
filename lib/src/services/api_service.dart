@@ -48,7 +48,7 @@ class ApiService {
   String get serverUrl =>
       dotenv.env[!isTestServer ? 'SERVER_URL' : 'TEST_SERVER_URL']!;
 
-  Future<Response<dynamic>?> get(
+  Future<Either<String, Response<dynamic>?>> get(
     //Either<String, Response>
     String path, {
     Map<String, String>? headers,
@@ -62,12 +62,21 @@ class ApiService {
           cancelToken: cancelToken,
           options: options);
       return Right(res);*/
-      return _dio.get(path,
+      //--right method
+      /*return _dio.get(path,
+          queryParameters: queryParameter,
+          cancelToken: cancelToken,
+          options: options);*/
+      //--for test
+      final res = await _dio.get(path,
           queryParameters: queryParameter,
           cancelToken: cancelToken,
           options: options);
-    } catch (e) {
-      return null;
+      return Right(res);
+    } on DioException catch (e) {
+      //only catch
+      // return null;
+      return Left(e.error.toString());
     }
   }
 

@@ -21,6 +21,7 @@ class AuthRepo extends AuthInf {
           if (res.right.data != null) {
             LocalStorageService.i
                 .setValueOnStorage(kToken, res.right.data['token']);
+            getAllUsers(data['username']);
             print(res.right.data);
             return Right(res.right.data);
           }
@@ -32,4 +33,43 @@ class AuthRepo extends AuthInf {
       return Left(AppException(error: e.toString()));
     }
   }
+
+  Future<void> getAllUsers(String username) async {
+    final res = await apiService.get("users");
+
+    if (res.right!.statusCode == 200) {
+      final data = res.right!.data;
+      for (final i in data) {
+        if (i['username'] == username) {
+          print(i);
+          LocalStorageService.i.setValueOnStorage(kMail, i["email"].toString());
+          LocalStorageService.i
+              .setValueOnStorage(kStreet, i["address"]["street"].toString());
+          LocalStorageService.i
+              .setValueOnStorage(kCity, i["address"]["city"].toString());
+          LocalStorageService.i
+              .setValueOnStorage(kNumber, i["address"]["number"].toString());
+          LocalStorageService.i
+              .setValueOnStorage(kZipcode, i["address"]["zipcode"].toString());
+          LocalStorageService.i
+              .setValueOnStorage(kPhone, i["phone"].toString());
+          LocalStorageService.i
+              .setValueOnStorage(kUsername, i["username"].toString());
+          LocalStorageService.i.setValueOnStorage(kUserId, i["id"].toString());
+        } else {
+          print("Username does not exist");
+        }
+      }
+    }
+  }
+
+  // @override
+  // Future<Either<AppException, Map<String, dynamic>>> register(Map<String, dynamic> data) async{
+  //   try {
+  //     final res = apiService.post(Endpoints.register, data);
+  //     if(res.r)
+  //   } catch (e) {
+
+  //   }
+  // }
 }

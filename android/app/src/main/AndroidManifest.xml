@@ -3,6 +3,7 @@
         android:label="boiler_plate"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <!--new usesCleartextTraffic and label-->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -20,6 +21,11 @@
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
               />
+              <!--For google pay-->
+           <meta-data 
+               android:name="com.google.android.gms.wallet.api.enable"
+               android:value="true"/>
+              <!--For google pay--> 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

@@ -10,6 +10,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     final appRouter = getIt<AppRouter>();
     return MaterialApp.router(
+        debugShowCheckedModeBanner: false,
         routerConfig: appRouter.config(),
         builder: EasyLoading.init(),
         title: "Test");

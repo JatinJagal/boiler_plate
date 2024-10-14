@@ -22,6 +22,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final nameController = TextEditingController();
   final passController = TextEditingController();
 
+  bool isVisible = false;
+
+  passVisibility() {
+    setState(() {
+      isVisible = !isVisible;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,13 +40,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(14),
+        // EdgeInsets.all(14.0)
+        padding: MediaQuery.of(context).orientation == Orientation.landscape
+            ? const EdgeInsets.only(left: 280.0, right: 280.0)
+            : const EdgeInsets.all(14.0),
+        // ? const EdgeInsets.all(14.0)
+        // : const EdgeInsets.all(40),
         child: Form(
           key: _formKey,
           child: Column(
             children: [
               TextFieldWidget(
-                prefixIcon: Icons.mail,
+                borderRadius: const BorderRadius.all(Radius.circular(40)),
+                prefixIcon: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.mail,
+                      color: Colors.grey,
+                    )),
                 label: "Name",
                 controller: nameController,
                 validator: (value) {
@@ -52,21 +71,42 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 height: 10,
               ),
               TextFieldWidget(
+                borderRadius: const BorderRadius.all(Radius.circular(40)),
                 validator: (value) {
                   if (value!.isEmpty || value == "") {
                     return "Fill required field";
                   }
                   return null;
                 },
-                prefixIcon: Icons.lock,
+                prefixIcon: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.lock,
+                      color: Colors.grey,
+                    )),
                 label: "Password",
+                // obsecuredText: isVisible,
                 controller: passController,
+                suffixIcon: IconButton(
+                    onPressed: () {
+                      passVisibility();
+                    },
+                    icon: Icon(
+                      isVisible ? Icons.visibility : Icons.visibility_off,
+                      color: Colors.grey,
+                    )),
               ),
               const SizedBox(
                 height: 10,
               ),
               AuthButton(
-                  label: "Login",
+                  label: const Text(
+                    "Login",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  ),
                   onPress: () async {
                     if (_formKey.currentState!.validate()) {
                       final data = {

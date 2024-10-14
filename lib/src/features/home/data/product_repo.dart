@@ -9,7 +9,7 @@ class ProductRepo {
 
   ProductRepo({required this.apiService});
 
-  Future<Either<AppException, List<ProductDataModel>>> getAllProducts() async {
+  /*Future<Either<AppException, List<ProductDataModel>>> getAllProducts() async {
     try {
       final res = await apiService.get(Endpoints.getProducts);
       if (res?.statusCode == 200) {
@@ -27,6 +27,35 @@ class ProductRepo {
           // return data;
           //
         }
+      }
+      return Left(AppException(error: "Something went wrong!"));
+    } catch (e) {
+      return Left(AppException(error: e.toString()));
+    }
+  }*/
+
+  Future<Either<AppException, List<ProductDataModel>>> getAllProducts() async {
+    try {
+      final res = await apiService.get(Endpoints.getProducts);
+      if (res.isRight) {
+        if (res.right?.statusCode == 200) {
+          if (res.right!.data != null) {
+            //test
+            List<ProductDataModel> data = List.from(
+                res.right!.data.map((e) => ProductDataModel.fromJson(e)));
+            return Right(data);
+            //
+            //for return
+            // return Right(res.data);
+            //
+            //add in model
+            // final data = ProductDataModel.fromJson(res.data);
+            // return data;
+            //
+          }
+        }
+      } else if (res.isLeft) {
+        return Left(AppException(error: res.left));
       }
       return Left(AppException(error: "Something went wrong!"));
     } catch (e) {

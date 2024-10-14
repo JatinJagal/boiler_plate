@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AuthButton extends StatelessWidget {
-  final String label;
+  final Text label;
   final VoidCallback onPress;
   final Size size;
   final Color color;
@@ -17,7 +17,7 @@ class AuthButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPress,
       style: ElevatedButton.styleFrom(fixedSize: size, backgroundColor: color),
-      child: Text(label),
+      child: label,
     );
   }
 }
